@@ -265,6 +265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 736dda2e54a7db747963e685f95feb71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textToRefresh: {fileID: 626603841}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,0 +1,11 @@
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\OptimizeDictionary\bin\Debug\netcoreapp2.2\OptimizeDictionary.deps.json
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\OptimizeDictionary\bin\Debug\netcoreapp2.2\OptimizeDictionary.runtimeconfig.json
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\OptimizeDictionary\bin\Debug\netcoreapp2.2\OptimizeDictionary.runtimeconfig.dev.json
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\OptimizeDictionary\bin\Debug\netcoreapp2.2\OptimizeDictionary.dll
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\OptimizeDictionary\bin\Debug\netcoreapp2.2\OptimizeDictionary.pdb
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\OptimizeDictionary\obj\Debug\netcoreapp2.2\OptimizeDictionary.csprojAssemblyReference.cache
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\OptimizeDictionary\obj\Debug\netcoreapp2.2\OptimizeDictionary.csproj.CoreCompileInputs.cache
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\OptimizeDictionary\obj\Debug\netcoreapp2.2\OptimizeDictionary.AssemblyInfoInputs.cache
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\OptimizeDictionary\obj\Debug\netcoreapp2.2\OptimizeDictionary.AssemblyInfo.cs
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\OptimizeDictionary\obj\Debug\netcoreapp2.2\OptimizeDictionary.dll
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\OptimizeDictionary\obj\Debug\netcoreapp2.2\OptimizeDictionary.pdb
