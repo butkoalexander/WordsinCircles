@@ -2,15 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System.IO;
+using UnityEngine.UI;
 
 public class LettersHelper : MonoBehaviour
 {
     private List<GameObject> FirstLettersList, SecondLettersList;
     private Sprite[] sprites;
     private Dictionary<string, string> letterwithimages = new Dictionary<string, string>();
-
-    public GameObject WordsWrited, Letters_0,
+    public Text UserWords;
+    public GameObject Letters_0,
        Letters_1, Letters_2, Letters_3, Letters_4, Letters_5,
        Letters_6, Letters_7, Letters_8, Letters_9, Letters_10,
        Letters_11, Letters_12, Letters_13, Letters_14,
@@ -18,34 +19,43 @@ public class LettersHelper : MonoBehaviour
        Letters_20, Letters_21, Letters_22, Letters_23, Letters_24,
        Letters_25, Letters_26, Letters_27, Letters_28, Letters_29,
        Letters_30, Letters_31, Letters_32;
-    public int lettersCount = 5;
+    public int lettersCount = 5,scale=100;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        
         // Выделяем в 2 листа гласные и согласные
         SetListofLetters();
-        SetLetters();
+        //расставляю в заданном порядке неповторяющиеся буквы, которые имет 2 гласные и 3 согласные в пропорциях к Scale
+        SetLetters(scale);
+        //Создается словарь ключ-значений, где название ключ название спрайта, а значение его значение в кирилице.
         SetDictionary();
+        //Устанавливаем Текст "слова которые вы написали" 
         SetWordsWriter();
     }
 
    
-
-
-
     // Update is called once per frame
     void Update()
     {
         if(Input.GetMouseButtonDown(0))
         {
+          //  WordsWrited.gameObject.AddComponent<Event>
+            //Проверяем по какому объекту кликнул пользователь и заносим эту буквы в слово которое будем собирать 
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if(hit)
             {
 
-                WordsWrited.GetComponent<TextMesh>().text+=Getletter(hit.collider.gameObject);
+             string changes=  Getletter(hit.collider.gameObject.name);
+             Debug.Log(hit.collider.gameObject.name);
+             UserWords.text += changes;
+                
+
+
+
             }
         }
     }
@@ -92,20 +102,23 @@ public class LettersHelper : MonoBehaviour
     {
         FirstLettersList = new List<GameObject>() { Letters_0, Letters_5, Letters_6, Letters_9, Letters_15, Letters_20, Letters_28, Letters_30, Letters_31, Letters_32 };
         SecondLettersList = new List<GameObject>() { Letters_1, Letters_2, Letters_3, Letters_4, Letters_7, Letters_8,  Letters_10,Letters_11, Letters_12, Letters_13,
-            Letters_14,Letters_16, Letters_17, Letters_18, Letters_19, Letters_21, Letters_22, Letters_23, Letters_24,Letters_25, Letters_26, Letters_27,  Letters_29,};
+        Letters_14,Letters_16, Letters_17, Letters_18, Letters_19, Letters_21, Letters_22, Letters_23, Letters_24,Letters_25, Letters_26, Letters_27,  Letters_29,};
     }
     private void SetWordsWriter()
     {
-       
-        Instantiate(WordsWrited, new Vector2(-3, 5), Quaternion.identity);
+        //UserWords.transform.position = new Vector3(0.5f, 4.5f, 1);
+        //WordsWrited.GetComponent<TextMesh>().text = "*";
+        //Instantiate(WordsWrited, new Vector2(0.5f, 3.5f), Quaternion.identity);
     }
-    void SetLetters()
+    void SetLetters(float scale=1)
     {
         //for 5 let
         for (int i = -2; i <= 2; i++)
         {
             var temp = GetRandListLetter(i);
-            Instantiate(temp, new Vector2(i, getRightParams(i)), Quaternion.identity);
+            float x= i*scale
+                , y= getRightParams(i)*scale;
+            Instantiate(temp, new Vector2(x, y), Quaternion.identity);
             if (i < 0) { FirstLettersList.Remove(temp); }
             else SecondLettersList.Remove(temp);
         }
