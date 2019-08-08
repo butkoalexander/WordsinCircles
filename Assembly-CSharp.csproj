@@ -55,11 +55,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\EventManager.cs" />
      <Compile Include="Assets\Scripts\LettersHelper.cs" />
      <Compile Include="Assets\Scripts\Refreshbutton.cs" />
      <Compile Include="Assets\Scripts\wordsAssistent.cs" />
+     <None Include="Assets\Resources\optimized5.txt" />
      <None Include="Assets\Resources\word_rus.txt" />
+     <None Include="Assets\Resources\NewOptimizedXML.xml" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/Users/Leikar/Documents/My Projects/WordsinCircles/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>

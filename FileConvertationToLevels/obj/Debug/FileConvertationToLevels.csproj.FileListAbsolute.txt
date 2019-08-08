@@ -1,0 +1,10 @@
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\FileConvertationToLevels\obj\Debug\FileConvertationToLevels.Properties.Resources.resources
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\FileConvertationToLevels\obj\Debug\FileConvertationToLevels.csproj.GenerateResource.cache
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\FileConvertationToLevels\obj\Debug\FileConvertationToLevels.csproj.CoreCompileInputs.cache
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\FileConvertationToLevels\bin\Debug\FileConvertationToLevels.exe.config
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\FileConvertationToLevels\bin\Debug\FileConvertationToLevels.exe
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\FileConvertationToLevels\bin\Debug\FileConvertationToLevels.pdb
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\FileConvertationToLevels\obj\Debug\FileConvertationToLevels.csprojAssemblyReference.cache
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\FileConvertationToLevels\obj\Debug\FileConvertationToLevels.Form1.resources
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\FileConvertationToLevels\obj\Debug\FileConvertationToLevels.exe
+C:\Users\Leikar\Documents\My Projects\WordsinCircles\FileConvertationToLevels\obj\Debug\FileConvertationToLevels.pdb

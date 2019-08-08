@@ -8,23 +8,13 @@ using UnityEngine.UI;
 
 public class wordsAssistent : MonoBehaviour
 {
+
     public Text text;
-    private 
+    private
     // Start is called before the first frame update
     void Start()
     {
-        //StreamReader str = new StreamReader("Assets/Resources/word_rus.txt");
-        //while (!str.EndOfStream)
-        //{
-        //    Debug.Log("reader");
-        //    string st = str.ReadLine();
-        //}
-
-        //    //StreamReader str = new StreamReader("Assets/Resources/word_rus.txt");
-        //    //while (!str.EndOfStream)
-        //    //{
-        //    //    //
-        //    //}
+        //if()
 
 
     }
@@ -32,12 +22,12 @@ public class wordsAssistent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
-        if (Input.GetMouseButtonDown(0)&&text!=null&&text.text!=null)
+
+        if (Input.GetMouseButtonDown(0) && text != null && text.text != null)
         {
-            
-          
-            
+
+
+
         }
     }
 }

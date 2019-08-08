@@ -4,13 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.UI;
+using System.Xml;
+using System.Runtime.Serialization;
+using System.Threading.Tasks;
+using Random = System.Random;
+using System.Linq;
 
 public class LettersHelper : MonoBehaviour
 {
-    private List<GameObject> FirstLettersList, SecondLettersList;
+ //  private List<GameObject> LettersList;
     private Sprite[] sprites;
     private Dictionary<string, string> letterwithimages = new Dictionary<string, string>();
     public Text UserWords;
+    public Dictionary<string, List<string>> dict;
     public GameObject Letters_0,
        Letters_1, Letters_2, Letters_3, Letters_4, Letters_5,
        Letters_6, Letters_7, Letters_8, Letters_9, Letters_10,
@@ -26,18 +32,24 @@ public class LettersHelper : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-        // Выделяем в 2 листа гласные и согласные
-        SetListofLetters();
+       
+            SetXMLLevels();
+       
+        // Выделяем в 2 листа гласные и согласные**** было необходиимо для полностью рандомного вызова - не практично
+      //  SetListofLetters();
         //расставляю в заданном порядке неповторяющиеся буквы, которые имет 2 гласные и 3 согласные в пропорциях к Scale
-        SetLetters(scale);
+     SetLetters(scale);
         //Создается словарь ключ-значений, где название ключ название спрайта, а значение его значение в кирилице.
         SetDictionary();
         //Устанавливаем Текст "слова которые вы написали" 
-        SetWordsWriter();
+       // SetWordsWriter();
+        //Подгружаем уровни из хмл в dict
+        
     }
 
-   
+  
+
+
     // Update is called once per frame
     void Update()
     {
@@ -74,7 +86,12 @@ public class LettersHelper : MonoBehaviour
 
 
 
-
+    private async void SetXMLLevels()
+    {
+        //NewOptimizedXML
+        dict = new Dictionary<string, List<string>>();
+        await Task.Run(() => ReadObject(@"C:\Users\Leikar\Documents\My Projects\WordsinCircles\Assets\Resources\NewOptimizedXML.xml"));
+    }
 
 
     private void SetDictionary()
@@ -98,12 +115,14 @@ public class LettersHelper : MonoBehaviour
     { return letterwithimages[obj.name]; }
     private string Getletter(string str)
     { return letterwithimages[str]; }
-    private void SetListofLetters()
+    private GameObject Getimage(string str)
     {
-        FirstLettersList = new List<GameObject>() { Letters_0, Letters_5, Letters_6, Letters_9, Letters_15, Letters_20, Letters_28, Letters_30, Letters_31, Letters_32 };
-        SecondLettersList = new List<GameObject>() { Letters_1, Letters_2, Letters_3, Letters_4, Letters_7, Letters_8,  Letters_10,Letters_11, Letters_12, Letters_13,
-        Letters_14,Letters_16, Letters_17, Letters_18, Letters_19, Letters_21, Letters_22, Letters_23, Letters_24,Letters_25, Letters_26, Letters_27,  Letters_29,};
+        
+        var z = letterwithimages.FirstOrDefault(x => x.Value == str).Key;
+      
+        return GetComponent<LettersHelper>().z;
     }
+   
     private void SetWordsWriter()
     {
         //UserWords.transform.position = new Vector3(0.5f, 4.5f, 1);
@@ -113,32 +132,20 @@ public class LettersHelper : MonoBehaviour
     void SetLetters(float scale=1)
     {
         //for 5 let
+       // List<string> temp = RandomKeys(dict) as List<string>;
+        //Debug.Log(temp + "       " + temp[0]);
         for (int i = -2; i <= 2; i++)
         {
-            var temp = GetRandListLetter(i);
-            float x= i*scale
-                , y= getRightParams(i)*scale;
-            Instantiate(temp, new Vector2(x, y), Quaternion.identity);
-            if (i < 0) { FirstLettersList.Remove(temp); }
-            else SecondLettersList.Remove(temp);
+           
+           float x= i*scale
+               , y= getRightParams(i)*scale;
+          //  Getimage(temp.);
+            Instantiate(Getimage("абзин"), new Vector2(x, y), Quaternion.identity);
+
+            
         }
     }
-
-    private GameObject GetRandListLetter(int i)
-    {
-
-        if (i < 0)
-        {
-            int rand = UnityEngine.Random.Range(0, FirstLettersList.Count);
-
-            return FirstLettersList[rand];
-        }
-        else
-        {
-            int rand = UnityEngine.Random.Range(0, SecondLettersList.Count);
-            return SecondLettersList[rand]; 
-        }
-    }
+    
 
     private float getRightParams(int i)
     {
@@ -149,4 +156,62 @@ public class LettersHelper : MonoBehaviour
         }
         return (i % 2 == 0) ? -1 : 1f;
     }
+
+    public void ReadObject(string fileName)
+    {
+        Console.WriteLine("Deserializing an instance of the object.");
+        FileStream fs = new FileStream(fileName,
+        FileMode.Open);
+        XmlDictionaryReader reader =
+            XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
+        DataContractSerializer ser = new DataContractSerializer(typeof(Dictionary<string, List<string>>));
+
+        // Deserialize the data and read it from the instance.
+        Dictionary<string, List<string>> deserializedPerson =
+            (Dictionary<string, List<string>>)ser.ReadObject(reader, true);
+        reader.Close();
+        fs.Close();
+        dict = deserializedPerson;
+      
+    }
+
+    public string RandomKeys(Dictionary<string, List<string>> _dict)
+    {
+        Random rand = new Random();
+       var keys =_dict.Keys.ToList();
+        int size = keys.Count;
+        
+        return keys[rand.Next(size)];
+        
+    }
 }
+//использовалось для рандомных букв на поле **** не практично
+    //private GameObject GetRandListLetter(int i)
+    //{
+
+    //    if (i < 0)
+    //    {
+    //        int rand = UnityEngine.Random.Range(0, FirstLettersList.Count);
+
+    //        return FirstLettersList[rand];
+    //    }
+    //    else
+    //    {
+    //        int rand = UnityEngine.Random.Range(0, SecondLettersList.Count);
+    //        return SecondLettersList[rand]; 
+    //    }
+    //} 
+    //  private void SetListofLetters()
+    //{
+    //     LettersList = new List<GameObject>(){ Letters_0,
+    //    Letters_1, Letters_2, Letters_3, Letters_4, Letters_5,
+    //    Letters_6, Letters_7, Letters_8, Letters_9, Letters_10,
+    //    Letters_11, Letters_12, Letters_13, Letters_14,
+    //    Letters_15, Letters_16, Letters_17, Letters_18, Letters_19,
+    //    Letters_20, Letters_21, Letters_22, Letters_23, Letters_24,
+    //    Letters_25, Letters_26, Letters_27, Letters_28, Letters_29,
+    //    Letters_30, Letters_31, Letters_32 };
+    //    FirstLettersList = new List<GameObject>() { Letters_0, Letters_5, Letters_6, Letters_9, Letters_15, Letters_20, Letters_28, Letters_30, Letters_31, Letters_32 };
+    //    SecondLettersList = new List<GameObject>() { Letters_1, Letters_2, Letters_3, Letters_4, Letters_7, Letters_8,  Letters_10,Letters_11, Letters_12, Letters_13,
+    //    Letters_14,Letters_16, Letters_17, Letters_18, Letters_19, Letters_21, Letters_22, Letters_23, Letters_24,Letters_25, Letters_26, Letters_27,  Letters_29,};
+    //}
