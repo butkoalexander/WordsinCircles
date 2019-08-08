@@ -19,7 +19,7 @@ public class LettersHelper : MonoBehaviour
     private Dictionary<string, string> letterwithimages = new Dictionary<string, string>();
     private Dictionary<string, GameObject> lettersWithGameObjects = new Dictionary<string, GameObject>();
 
-    public Text UserWords,TextScore;
+    public Text UserWords,TextScore,lastone,lasttwo,lastthree;
     public Dictionary<string, List<string>> dict;
     public GameObject Letters_0,
        Letters_1, Letters_2, Letters_3, Letters_4, Letters_5,
@@ -36,7 +36,7 @@ public class LettersHelper : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
+       // доставем из хмл уровни
         SetXMLLevels();
        
         SetListofLetters();
@@ -83,35 +83,53 @@ public class LettersHelper : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if(hit)
             {
-                
-                string changes=  Getletter(hit.collider.gameObject.name);
-             //Debug.Log(hit.collider.gameObject.name);
-             UserWords.text += changes;
-             if(dict[CurrentWordHash].Contains(UserWords.text))
-                {
-                    intScore += UserWords.text.Length;
-                    TextScore.text = "Score: " + intScore;
 
-
-                    dict[CurrentWordHash].Remove(UserWords.text);
-                    UserWords.text = "";
-                    
-                    if (dict[CurrentWordHash].Count == 0)
-                    {
-                        Debug.Log("words end");
-                        dict.Remove(CurrentWordHash);
-                        IsNewKeyNeeded = true;
-                    }
-                }
-
-                if (IsNewKeyNeeded)
-                {
-                    clearListofImages();
-                    CurrentWordHash = SetLetters(scale);
-                }
+                GameProcess(hit);
 
             }
         }
+    }
+
+    private void GameProcess(RaycastHit2D hit)
+    {
+        string changes = Getletter(hit.collider.gameObject.name);
+        //Debug.Log(hit.collider.gameObject.name);
+        UserWords.text += changes;
+        if (dict[CurrentWordHash].Contains(UserWords.text))
+        {
+            intScore += UserWords.text.Length;
+            TextScore.text = "Score: " + intScore;
+            SetNewWordinScore(UserWords.text);
+
+            dict[CurrentWordHash].Remove(UserWords.text);
+            UserWords.text = "";
+
+            if (dict[CurrentWordHash].Count == 0)
+            {
+                Debug.Log("words end");
+                dict.Remove(CurrentWordHash);
+                IsNewKeyNeeded = true;
+            }
+        }
+
+        if (IsNewKeyNeeded)
+        {
+            clearListofImages();
+            CurrentWordHash = SetLetters(scale);
+        }
+    }
+
+    private void SetNewWordinScore(string str)
+    {
+       if(lasttwo!=null)
+        {
+            lastthree.text = lasttwo.text;
+        }
+       if(lastone!=null)
+        {
+            lasttwo.text = lastone.text;
+        }
+        lastone.text = str+": "+str.Count();
     }
 
     private void clearListofImages()
