@@ -12,10 +12,14 @@ using System.Linq;
 
 public class LettersHelper : MonoBehaviour
 {
- //  private List<GameObject> LettersList;
-    private Sprite[] sprites;
+    private List<GameObject> ListOfLettersImages=null;
+    private string CurrentWordHash="";
+    private int intScore=0;
+    private bool IsNewKeyNeeded=true;
     private Dictionary<string, string> letterwithimages = new Dictionary<string, string>();
-    public Text UserWords;
+    private Dictionary<string, GameObject> lettersWithGameObjects = new Dictionary<string, GameObject>();
+
+    public Text UserWords,TextScore;
     public Dictionary<string, List<string>> dict;
     public GameObject Letters_0,
        Letters_1, Letters_2, Letters_3, Letters_4, Letters_5,
@@ -33,12 +37,12 @@ public class LettersHelper : MonoBehaviour
     void Start()
     {
        
-            SetXMLLevels();
+        SetXMLLevels();
        
         // Выделяем в 2 листа гласные и согласные**** было необходиимо для полностью рандомного вызова - не практично
-      //  SetListofLetters();
+        SetListofLetters();
         //расставляю в заданном порядке неповторяющиеся буквы, которые имет 2 гласные и 3 согласные в пропорциях к Scale
-     SetLetters(scale);
+        CurrentWordHash = SetLetters(scale);
         //Создается словарь ключ-значений, где название ключ название спрайта, а значение его значение в кирилице.
         SetDictionary();
         //Устанавливаем Текст "слова которые вы написали" 
@@ -47,7 +51,27 @@ public class LettersHelper : MonoBehaviour
         
     }
 
-  
+    private void SetListofLetters()
+    {
+        
+       var LettersList = new List<GameObject>(){ Letters_0,
+        Letters_1, Letters_2, Letters_3, Letters_4, Letters_5,
+        Letters_6, Letters_7, Letters_8, Letters_9, Letters_10,
+        Letters_11, Letters_12, Letters_13, Letters_14,
+        Letters_15, Letters_16, Letters_17, Letters_18, Letters_19,
+        Letters_20, Letters_21, Letters_22, Letters_23, Letters_24,
+        Letters_25, Letters_26, Letters_27, Letters_28, Letters_29,
+        Letters_30, Letters_31, Letters_32 };
+
+
+        var tempalphabet = new List<string>() { "а", "б", "в", "г", "д", "е", "ё", "ж", "з", "и", "й", "к", "л", "м", "н", "о", "п", "р", "с", "т", "у", "ф", "х", "ц", "ч", "ш", "щ", "ъ", "ы", "ь", "э", "ю", "я" };
+        for (int i = 0; i < LettersList.Count; i++)
+        {
+            lettersWithGameObjects.Add( tempalphabet[i], LettersList[i]);
+        }
+    }
+
+
 
 
     // Update is called once per frame
@@ -64,7 +88,18 @@ public class LettersHelper : MonoBehaviour
              string changes=  Getletter(hit.collider.gameObject.name);
              Debug.Log(hit.collider.gameObject.name);
              UserWords.text += changes;
-                
+             if(dict[CurrentWordHash].Contains(UserWords.text))
+                {
+                    intScore += UserWords.text.Length;
+                    TextScore.text = "Score: " + intScore;
+                    UserWords.text = "";
+                    dict[CurrentWordHash].Remove(UserWords.text);
+                    if (dict[CurrentWordHash].Count == 0)
+                    {
+                        dict.Remove(CurrentWordHash);
+                        IsNewKeyNeeded = true;
+                    }
+                }
 
 
 
@@ -86,11 +121,11 @@ public class LettersHelper : MonoBehaviour
 
 
 
-    private async void SetXMLLevels()
+    private  void SetXMLLevels()
     {
         //NewOptimizedXML
         dict = new Dictionary<string, List<string>>();
-        await Task.Run(() => ReadObject(@"C:\Users\Leikar\Documents\My Projects\WordsinCircles\Assets\Resources\NewOptimizedXML.xml"));
+       ReadObject(@"C:\Users\Leikar\Documents\My Projects\WordsinCircles\Assets\Resources\NewOptimizedXML.xml");
     }
 
 
@@ -115,35 +150,34 @@ public class LettersHelper : MonoBehaviour
     { return letterwithimages[obj.name]; }
     private string Getletter(string str)
     { return letterwithimages[str]; }
-    private GameObject Getimage(string str)
+    private GameObject Getimage(char str)
     {
-        
-        var z = letterwithimages.FirstOrDefault(x => x.Value == str).Key;
-      
-        return GetComponent<LettersHelper>().z;
+        return lettersWithGameObjects[str.ToString()];
     }
    
     private void SetWordsWriter()
     {
-        //UserWords.transform.position = new Vector3(0.5f, 4.5f, 1);
-        //WordsWrited.GetComponent<TextMesh>().text = "*";
-        //Instantiate(WordsWrited, new Vector2(0.5f, 3.5f), Quaternion.identity);
+       
     }
-    void SetLetters(float scale=1)
+    string SetLetters(float scale=1)
     {
-        //for 5 let
-       // List<string> temp = RandomKeys(dict) as List<string>;
-        //Debug.Log(temp + "       " + temp[0]);
+        if (!IsNewKeyNeeded)
+        {
+            throw new Exception("IsNewKeyNeeded :"+ IsNewKeyNeeded);
+        }
+        string temp2= RandomKeys(dict).ToString();
+        char[] a = temp2.ToCharArray();
         for (int i = -2; i <= 2; i++)
         {
            
            float x= i*scale
                , y= getRightParams(i)*scale;
-          //  Getimage(temp.);
-            Instantiate(Getimage("абзин"), new Vector2(x, y), Quaternion.identity);
 
-            
+            ListOfLettersImages.Add(Instantiate(Getimage(a[i+2]), new Vector2(x, y), Quaternion.identity));
+        
         }
+        IsNewKeyNeeded = false;
+        return temp2;
     }
     
 
@@ -178,10 +212,10 @@ public class LettersHelper : MonoBehaviour
     public string RandomKeys(Dictionary<string, List<string>> _dict)
     {
         Random rand = new Random();
-       var keys =_dict.Keys.ToList();
-        int size = keys.Count;
-        
-        return keys[rand.Next(size)];
+        List<string> stringkeys = _dict.Keys.ToList();
+        int size = stringkeys.Count-1;
+        int keynomber = rand.Next(size);
+        return stringkeys[keynomber];
         
     }
 }
