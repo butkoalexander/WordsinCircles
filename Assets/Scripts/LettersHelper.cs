@@ -127,7 +127,7 @@ public class LettersHelper : MonoBehaviour
     {
         //NewOptimizedXML
         dict = new Dictionary<string, List<string>>();
-       ReadObject(@"C:\Users\Leikar\Documents\My Projects\WordsinCircles\Assets\Resources\NewOptimizedXML.xml");
+       ReadObject(@"C:\Users\Leikar\Documents\My Projects\WordsinCircles\Assets\Resources\NewOptimizedXML2.xml");
     }
 
 

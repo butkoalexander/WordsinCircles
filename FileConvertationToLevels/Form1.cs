@@ -30,8 +30,8 @@ namespace FileConvertationToLevels
         private void Button1_Click(object sender, EventArgs e)
         {
             List<string> readText = new List<string>();
-        
-            string tmp = null;
+
+            string tmp = "";
             if (textBox1.Text != null)
             {
                 try
@@ -42,7 +42,7 @@ namespace FileConvertationToLevels
 
                 for (int i = 0; i<readText.Count; i++)
                 {
-                    tmp = Likeheshcheck(readText[i]);//получаем "хэшкод" ключа, хэшкод создается из уникальных отсортированных по порядку букв из данного слова
+                    tmp = Likeheshcheck(readText[i]).ToString();//получаем "хэшкод" ключа, хэшкод создается из уникальных отсортированных по порядку букв из данного слова
 
                     //Если в "хэшкоде" уникальных букв 5 и такого ключа еще не существует добавляем новый ключ и слово к этому ключу,                                 
                     //при этом удаляем его из перепроверочного списка, (перепроверочный список нужен на случай если будет слово, из которого нельзя создать ключ,
@@ -94,24 +94,7 @@ namespace FileConvertationToLevels
             writer.Close();
             MessageBox.Show("DONE");
         }
-        //public static void ReadObject(string fileName)
-        //{
-        //    Console.WriteLine("Deserializing an instance of the object.");
-        //    FileStream fs = new FileStream(fileName,
-        //    FileMode.Open);
-        //    XmlDictionaryReader reader =
-        //        XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
-        //    DataContractSerializer ser = new DataContractSerializer(typeof(Person));
-
-        //    // Deserialize the data and read it from the instance.
-        //    Person deserializedPerson =
-        //        (Person)ser.ReadObject(reader, true);
-        //    reader.Close();
-        //    fs.Close();
-        //    Console.WriteLine(String.Format("{0} {1}, ID: {2}",
-        //    deserializedPerson.FirstName, deserializedPerson.LastName,
-        //    deserializedPerson.ID));
-        //}
+  
         private string Likeheshcheck(string s)
         {
            
@@ -119,9 +102,13 @@ namespace FileConvertationToLevels
        
            var tmp= s.ToList<char>();
             tmp.Sort();
-           
+            s = "";
+            foreach (var item in tmp)
+            {
+                s += item;
+            }
             
-            return tmp.ToString();
+            return s;
         }
         private string GetMyHash(string s)
         {
