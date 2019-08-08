@@ -39,7 +39,6 @@ public class LettersHelper : MonoBehaviour
        
         SetXMLLevels();
        
-        // Выделяем в 2 листа гласные и согласные**** было необходиимо для полностью рандомного вызова - не практично
         SetListofLetters();
         //расставляю в заданном порядке неповторяющиеся буквы, которые имет 2 гласные и 3 согласные в пропорциях к Scale
         CurrentWordHash = SetLetters(scale);
@@ -84,42 +83,45 @@ public class LettersHelper : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if(hit)
             {
-
-             string changes=  Getletter(hit.collider.gameObject.name);
-             Debug.Log(hit.collider.gameObject.name);
+                
+                string changes=  Getletter(hit.collider.gameObject.name);
+             //Debug.Log(hit.collider.gameObject.name);
              UserWords.text += changes;
              if(dict[CurrentWordHash].Contains(UserWords.text))
                 {
                     intScore += UserWords.text.Length;
                     TextScore.text = "Score: " + intScore;
-                    UserWords.text = "";
+
+
                     dict[CurrentWordHash].Remove(UserWords.text);
+                    UserWords.text = "";
+                    
                     if (dict[CurrentWordHash].Count == 0)
                     {
+                        Debug.Log("words end");
                         dict.Remove(CurrentWordHash);
                         IsNewKeyNeeded = true;
                     }
                 }
 
-
+                if (IsNewKeyNeeded)
+                {
+                    clearListofImages();
+                    CurrentWordHash = SetLetters(scale);
+                }
 
             }
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    private void clearListofImages()
+    {
+        foreach (var item in ListOfLettersImages)
+        {
+            item.SetActive(false);
+            Destroy(item);
+        }
+    }
 
     private  void SetXMLLevels()
     {
@@ -165,6 +167,7 @@ public class LettersHelper : MonoBehaviour
         {
             throw new Exception("IsNewKeyNeeded :"+ IsNewKeyNeeded);
         }
+        ListOfLettersImages = new List<GameObject>();
         string temp2= RandomKeys(dict).ToString();
         char[] a = temp2.ToCharArray();
         for (int i = -2; i <= 2; i++)

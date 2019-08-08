@@ -78,7 +78,7 @@ namespace FileConvertationToLevels
                 // Теперь Словарь dict содержит в себе реальные уровни, с возможными исходами наборов слов.
                 //Записываем в file путем сюриализации
                
-                WriteObject(Path.GetDirectoryName(textBox1.Text) + "\\NewOptimizedXML.xml",dict);
+                WriteObject(Path.GetDirectoryName(textBox1.Text) + "\\NewOptimizedXML2.xml",dict);
                
 
             }
@@ -114,10 +114,14 @@ namespace FileConvertationToLevels
         //}
         private string Likeheshcheck(string s)
         {
+           
+            s =GetMyHash(s);
+       
+           var tmp= s.ToList<char>();
+            tmp.Sort();
+           
             
-          s=GetMyHash(s);
-            s.ToList<char>().Sort();
-           return s.ToString();
+            return tmp.ToString();
         }
         private string GetMyHash(string s)
         {

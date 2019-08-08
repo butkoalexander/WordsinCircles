@@ -61,6 +61,7 @@
      <None Include="Assets\Resources\optimized5.txt" />
      <None Include="Assets\Resources\word_rus.txt" />
      <None Include="Assets\Resources\NewOptimizedXML.xml" />
+     <None Include="Assets\Resources\NewOptimizedXML2.xml" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/Users/Leikar/Documents/My Projects/WordsinCircles/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
