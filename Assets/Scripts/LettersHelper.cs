@@ -36,23 +36,20 @@ public class LettersHelper : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       // доставем из хмл уровни
-        SetXMLLevels();
-       
-        SetListofLetters();
-        //расставляю в заданном порядке неповторяющиеся буквы, которые имет 2 гласные и 3 согласные в пропорциях к Scale
-        CurrentWordHash = SetLetters(scale);
-        //Создается словарь ключ-значений, где название ключ название спрайта, а значение его значение в кирилице.
-        SetDictionary();
-        //Устанавливаем Текст "слова которые вы написали" 
-       // SetWordsWriter();
-        //Подгружаем уровни из хмл в dict
+      
+        SetXMLLevels(); // доставем из хмл уровни
+        SetListofLetters();  //Создаем соответсвие картинка-буква
         
+        CurrentWordHash = SetLetters(scale);//расставляем в заданном порядке неповторяющиеся буквы, в пропорциях к Scale
+        
+        SetDictionary();//Создается словарь ключ-значений, где название ключ название спрайта, а значение его значение в кирилице.
+      
+                
     }
 
     private void SetListofLetters()
     {
-        
+        //Создаем соответсвие картинка-буква
        var LettersList = new List<GameObject>(){ Letters_0,
         Letters_1, Letters_2, Letters_3, Letters_4, Letters_5,
         Letters_6, Letters_7, Letters_8, Letters_9, Letters_10,
@@ -78,12 +75,12 @@ public class LettersHelper : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0))
         {
-          //  WordsWrited.gameObject.AddComponent<Event>
-            //Проверяем по какому объекту кликнул пользователь и заносим эту буквы в слово которое будем собирать 
+         
+            //Проверяем по какому объекту кликнул пользователь и заносим эту букву в слово которое будем собирать 
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if(hit)
             {
-
+                //Основной процесс приложения
                 GameProcess(hit);
 
             }
@@ -92,30 +89,29 @@ public class LettersHelper : MonoBehaviour
 
     private void GameProcess(RaycastHit2D hit)
     {
-        string changes = Getletter(hit.collider.gameObject.name);
-        //Debug.Log(hit.collider.gameObject.name);
-        UserWords.text += changes;
-        if (dict[CurrentWordHash].Contains(UserWords.text))
+        string changes = Getletter(hit.collider.gameObject.name);// Получаем нажатую букву
+        UserWords.text += changes;//добавляем букву на экран
+        if (dict[CurrentWordHash].Contains(UserWords.text))//Проверяем существование текущего составленного слова
         {
-            intScore += UserWords.text.Length;
-            TextScore.text = "Score: " + intScore;
-            SetNewWordinScore(UserWords.text);
+            //Если такое слово существует
+            intScore += UserWords.text.Length;//Увеличиваем количество очков за это слово
+            TextScore.text = "Score: " + intScore;//Выводим очки на экран
+            SetNewWordinScore(UserWords.text);//Обновляем список последних 3 слов на экаране
 
-            dict[CurrentWordHash].Remove(UserWords.text);
-            UserWords.text = "";
+            dict[CurrentWordHash].Remove(UserWords.text);//Убираем это слово из словаря, что бы мы на него больше не могли наткнуться еще раз
+            UserWords.text = "";//обнуляем поле для ввода, что бы пользователь мог начать составлять новое слово
 
-            if (dict[CurrentWordHash].Count == 0)
+            if (dict[CurrentWordHash].Count == 0)//Если слова которые возможно составить из данного состава букв кончились убираем этот ключ из словаря
             {
-                Debug.Log("words end");
                 dict.Remove(CurrentWordHash);
-                IsNewKeyNeeded = true;
+                IsNewKeyNeeded = true;//Ставим флаг о необходимости достать новый ключ
             }
         }
 
         if (IsNewKeyNeeded)
         {
-            clearListofImages();
-            CurrentWordHash = SetLetters(scale);
+            ClearListofImages();//Убираем старые буквы с экрана
+            CurrentWordHash = SetLetters(scale);//Ставим новые буквы на экран
         }
     }
 
@@ -132,7 +128,7 @@ public class LettersHelper : MonoBehaviour
         lastone.text = str+": "+str.Count();
     }
 
-    private void clearListofImages()
+    private void ClearListofImages()
     {
         foreach (var item in ListOfLettersImages)
         {
@@ -144,6 +140,7 @@ public class LettersHelper : MonoBehaviour
     private  void SetXMLLevels()
     {
         //NewOptimizedXML
+        // Подгружаем файл с уровнями, предварительно сформированными
         dict = new Dictionary<string, List<string>>();
        ReadObject(@"C:\Users\Leikar\Documents\My Projects\WordsinCircles\Assets\Resources\NewOptimizedXML2.xml");
     }
@@ -166,8 +163,7 @@ public class LettersHelper : MonoBehaviour
           
         }
     }
-    private string Getletter(GameObject obj)
-    { return letterwithimages[obj.name]; }
+
     private string Getletter(string str)
     { return letterwithimages[str]; }
     private GameObject Getimage(char str)
@@ -175,24 +171,22 @@ public class LettersHelper : MonoBehaviour
         return lettersWithGameObjects[str.ToString()];
     }
    
-    private void SetWordsWriter()
-    {
-       
-    }
+ 
     string SetLetters(float scale=1)
     {
         if (!IsNewKeyNeeded)
         {
             throw new Exception("IsNewKeyNeeded :"+ IsNewKeyNeeded);
         }
+
         ListOfLettersImages = new List<GameObject>();
-        string temp2= RandomKeys(dict).ToString();
+        string temp2= RandomKeys(dict).ToString();//получаем случайный ключ изсловаря уровней
         char[] a = temp2.ToCharArray();
         for (int i = -2; i <= 2; i++)
         {
            
            float x= i*scale
-               , y= getRightParams(i)*scale;
+               , y= GetRightParams(i)*scale;//Расставляем 5 букв по кругу (примерно) 
 
             ListOfLettersImages.Add(Instantiate(Getimage(a[i+2]), new Vector2(x, y), Quaternion.identity));
         
@@ -202,7 +196,7 @@ public class LettersHelper : MonoBehaviour
     }
     
 
-    private float getRightParams(int i)
+    private float GetRightParams(int i)
     {
         //распологает буквы по заданной траектории что бы получилось подобие круга
         if (i % 3 == 0)
@@ -214,9 +208,10 @@ public class LettersHelper : MonoBehaviour
 
     public void ReadObject(string fileName)
     {
-        Console.WriteLine("Deserializing an instance of the object.");
-        FileStream fs = new FileStream(fileName,
-        FileMode.Open);
+        //Десириализуем файл уровней в систему словаря Dictionary<string, List<string>>,
+        //где ключ это набор уникальных букв(5), и значение список возможных вариантов составленных слов
+        //данный файл формируется в другой программе
+        FileStream fs = new FileStream(fileName,FileMode.Open);
         XmlDictionaryReader reader =
             XmlDictionaryReader.CreateTextReader(fs, new XmlDictionaryReaderQuotas());
         DataContractSerializer ser = new DataContractSerializer(typeof(Dictionary<string, List<string>>));
@@ -232,7 +227,7 @@ public class LettersHelper : MonoBehaviour
 
     public string RandomKeys(Dictionary<string, List<string>> _dict)
     {
-        Random rand = new Random();
+        Random rand = new Random();//Получаем случайный ключ
         List<string> stringkeys = _dict.Keys.ToList();
         int size = stringkeys.Count-1;
         int keynomber = rand.Next(size);
@@ -240,33 +235,3 @@ public class LettersHelper : MonoBehaviour
         
     }
 }
-//использовалось для рандомных букв на поле **** не практично
-    //private GameObject GetRandListLetter(int i)
-    //{
-
-    //    if (i < 0)
-    //    {
-    //        int rand = UnityEngine.Random.Range(0, FirstLettersList.Count);
-
-    //        return FirstLettersList[rand];
-    //    }
-    //    else
-    //    {
-    //        int rand = UnityEngine.Random.Range(0, SecondLettersList.Count);
-    //        return SecondLettersList[rand]; 
-    //    }
-    //} 
-    //  private void SetListofLetters()
-    //{
-    //     LettersList = new List<GameObject>(){ Letters_0,
-    //    Letters_1, Letters_2, Letters_3, Letters_4, Letters_5,
-    //    Letters_6, Letters_7, Letters_8, Letters_9, Letters_10,
-    //    Letters_11, Letters_12, Letters_13, Letters_14,
-    //    Letters_15, Letters_16, Letters_17, Letters_18, Letters_19,
-    //    Letters_20, Letters_21, Letters_22, Letters_23, Letters_24,
-    //    Letters_25, Letters_26, Letters_27, Letters_28, Letters_29,
-    //    Letters_30, Letters_31, Letters_32 };
-    //    FirstLettersList = new List<GameObject>() { Letters_0, Letters_5, Letters_6, Letters_9, Letters_15, Letters_20, Letters_28, Letters_30, Letters_31, Letters_32 };
-    //    SecondLettersList = new List<GameObject>() { Letters_1, Letters_2, Letters_3, Letters_4, Letters_7, Letters_8,  Letters_10,Letters_11, Letters_12, Letters_13,
-    //    Letters_14,Letters_16, Letters_17, Letters_18, Letters_19, Letters_21, Letters_22, Letters_23, Letters_24,Letters_25, Letters_26, Letters_27,  Letters_29,};
-    //}
