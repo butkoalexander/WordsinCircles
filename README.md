@@ -1,2 +1,4 @@
 # WordsinCircles
  simpe game to gather letters in words
+The repository contains three programs. OptimizeDictionary - removes from the dictionary all words that do not meet our criteria, in the double case these are words that contain more than 5 unique letters. FileConvertationToLevels - converts a dictionary of words into levels and serialize them into xml, creating a dictionary <string, List <string>> where the key is 5 unique characters, and the value is a list of possible words that can be composed of them.
+And of course, the game itself, which deserializes the file with levels, and builds on this data a random level (without repetitions) in which the user makes words of 5 letters on the screen, gets points for each word equal to the number of letters in the composed word, as soon as possible word options end - the set of letters is updated.
